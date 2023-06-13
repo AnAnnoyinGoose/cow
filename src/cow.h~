@@ -1,0 +1,33 @@
+#ifndef _MAIN_COW_DECLACATION_
+#define _MAIN_COW_DECLACATION_
+
+#define MAX_BUFFER_SIZE 4096
+
+struct Request
+{
+      char method[64], path[MAX_BUFFER_SIZE / 4];
+};
+struct Response
+{
+      char status[5], res_phrase[MAX_BUFFER_SIZE / 4], body[MAX_BUFFER_SIZE - 5 - MAX_BUFFER_SIZE / 4]
+};
+
+typedef void (*callback_t)(struct Request *, struct Response *);
+union Route
+{
+      callback_t callback;
+      char path[MAX_BUFFER_SIZE / 4];
+      int pos;
+};
+
+#endif
+
+#ifndef _MAIN_COW_IMPL_
+#define _MAIN_COW_IMPL_
+
+void res_send(struct Response *res)
+{
+      char response[MAX_BUFFER_SIZE];
+};
+
+#endif
