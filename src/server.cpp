@@ -1,4 +1,13 @@
 #include "server.h"
+// X functions for the methods
+#define METHODS                                                                \
+  X(GET)                                                                       \
+  X(POST)                                                                      \
+  X(PUT)                                                                       \
+  X(DELETE)                                                                    \
+  X(HEAD)                                                                      \
+  X(OPTIONS)                                                                   \
+  X(CONNECT)
 
 namespace core {
 
@@ -73,27 +82,15 @@ void Server::clientHandler(int socket) {
       ss >> request.method >> request.path >> request.version;
       std::string headers = str.substr(str.find(DELIMETER) + 1);
     } // EOS
-    if (request.path == "/") {
-      response.version = "HTTP/1.0";
-      response.status = "200";
-      response.message = "OK";
-      response.body = HTML_EXAMPLE_PAGE;
-      response.headers["Server"] = SERVER_VERSION;
-      response.headers["Content-Type"] = "text/html";
-      response.headers["Content-Length"] = std::to_string(response.body.size());
-      response.socket = socket;
-      response.send();
-    } else {
-      response.version = "HTTP/1.1";
-      response.status = "404";
-      response.message = "Not Found";
-      response.body = HTML_EXAMPLE_PAGE_4XX;
-      response.headers["Server"] = SERVER_VERSION;
-      response.headers["Content-Type"] = "text/html";
-      response.headers["Content-Length"] = std::to_string(response.body.size());
-      response.socket = socket;
-      response.send();
-    }
+
+    response = this->routes[request.path].handler(request);
+    response.version = "HTTP/1.1";
+    response.status = "200";
+    response.message = "OK";
+    response.headers["Content-Type"] = "text/html";
+    response.socket = socket;
+    response.send();
+    
   }
   close(socket);
 #undef BUFFER_SIZE
@@ -107,7 +104,16 @@ Server::~Server() {
 }
 void Server::addRoute(const std::string &method, const std::string &path,
                       std::function<Response(const Request &)> handler) {
-  routes.emplace(method, Route{method, path, &handler});
+  routes.emplace(path, Route{method, path, handler});
 }
+
+#define X(NAME)                                                                \
+  void Server::NAME(const std::string &path,                                   \
+                    std::function<Response(const Request &)> handler) {        \
+    addRoute(#NAME, path, handler);                                            \
+  }
+METHODS
+#undef X
+
 } // namespace core
-  //
+  

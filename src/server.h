@@ -1,3 +1,5 @@
+#include "doctype.h"
+#include "expamle_html_pages.h"
 #include <arpa/inet.h>
 #include <cstring>
 #include <functional>
@@ -10,31 +12,16 @@
 #include <unistd.h>
 #include <unordered_map>
 #include <vector>
-#include "expamle_html_pages.h"
-
 
 // Definitions
-#define SERVER_VERSION "cow 1.0.0 BETA"
+#define SERVER_VERSION "cow 1.0.0"
 
 namespace core {
-
-struct Request {
-  std::string method, path, version;
-
-  std::unordered_map<std::string, std::string> headers;
-};
-
-struct Response {
-  std::string status, message, body, version;
-  std::unordered_map<std::string, std::string> headers;
-  int socket;
-  int send() const;
-};
 
 struct Route {
   std::string method;
   std::string path;
-  std::function<Response(const Request &)> *handler;
+  std::function<Response(const Request &)> handler;
 };
 
 class Server {
