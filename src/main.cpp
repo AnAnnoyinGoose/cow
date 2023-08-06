@@ -8,7 +8,7 @@ auto cow_handler(const core::Request &request) -> core::Response
   (void)request;
   HTML html("cow.html", {{"user", "Goose"}});
   core::Response res = html.send();
- 
+
   return res;
 }
 

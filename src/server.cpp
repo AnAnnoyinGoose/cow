@@ -48,7 +48,6 @@ namespace core
     this->headers["Content-Type"] = "text/plain";
     this->version = "HTTP/1.1";
   }
-
   Server::Server(int port, const std::string &host) : port(port), host(host)
   {
     socket = ::socket(AF_INET, SOCK_STREAM, 0);
@@ -125,13 +124,15 @@ namespace core
       }
       catch (const std::exception &e)
       {
-        response.status = "404";
-        response.message = "Not Found";
-        response.body = "404 Not Found";
-        response.headers["Content-Length"] = std::to_string(response.body.size());
-        response.headers["Content-Type"] = "text/plain";
-        response.version = "HTTP/1.1";
+        if (request.headers["Accept"] == "text/html")
+        {
+          response.pnf(HTML_EXAMPLE_PAGE_4XX);
+        }
+        else if (this->serveStaticFile(request.path, &response))
+        {
+        }
       }
+      response.headers["Server"] = SERVER_VERSION;
       response.socket = socket;
       response.send();
     }
@@ -162,5 +163,44 @@ namespace core
 
   METHODS
 #undef X
+  bool Server::serveStaticFile(const std::string &path, Response *res)
+  {
+    if (path.find(".css") != std::string::npos)
+    {
+      res->headers["Content-Type"] = "text/css";
+    }
+    else if (path.find(".js") != std::string::npos)
+    {
+      res->headers["Content-Type"] = "text/javascript";
+    }
+    else if (path.find(".png") != std::string::npos)
+    {
+      res->headers["Content-Type"] = "image/png";
+    }
+    else if (path.find(".jpg") != std::string::npos)
+    {
+      res->headers["Content-Type"] = "image/jpeg";
+    }
+    else if (path.find(".svg") != std::string::npos)
+    {
+      res->headers["Content-Type"] = "image/svg+xml";
+    }
+    else
+    {
+      res->pnf("Not Supported and/or not found");
+      return false;
+    }
+    std::ifstream file("public/" + path);
+    // if file is not found
+    if (!file.is_open())
+    {
+      res->pnf("Not Supported and/or not found");
+      return false;
+    }
+    std::stringstream buffer;
+    buffer << file.rdbuf();
+    res->body = buffer.str();
+    return true;
+  }
 
 } // namespace core

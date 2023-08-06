@@ -1,0 +1,2 @@
+#!/bin/bash 
+ tcd build make; ./build/cow

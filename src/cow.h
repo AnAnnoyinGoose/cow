@@ -3,5 +3,4 @@
 
 #include "server.h"
 
-
 #endif // !#ifndef _COW_H_

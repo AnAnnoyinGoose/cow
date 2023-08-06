@@ -37,7 +37,7 @@ namespace core
     void addRoute(const std::string &method, const std::string &path,
                   std::function<Response(const Request &)> handler);
 
-    bool serveFile(const std::string &path, Response &res);
+    bool serveStaticFile(const std::string &path, Response *res);
 
     void clientHandler(int socket);
 

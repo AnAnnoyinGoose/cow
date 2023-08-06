@@ -8,31 +8,38 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
-namespace core {
-struct Response {
-  std::string status, message, body, version, path;
-  std::unordered_map<std::string, std::string> headers;
-  int socket;
-  int send() const;
-  int redirect(const std::string &path);
-  template <typename T> int sendFile(T &filetype); // TODO: IMPL
-  void pnf(std::string contents);
-};
-struct Request {
-  std::string method, path, version;
-  std::unordered_map<std::string, std::string> headers;
-};
+namespace core
+{
+  struct Response
+  {
+    std::string status, message, body, version, path;
+    std::unordered_map<std::string, std::string> headers;
+    int socket;
+    int send() const;
+    int redirect(const std::string &path);
+    template <typename T>
+    int sendFile(T &filetype); // TODO: IMPL
+    void pnf(std::string contents);
+  };
+  struct Request
+  {
+    std::string method, path, version;
+    std::unordered_map<std::string, std::string> headers;
+  };
 
 }; // namespace core
-struct HTML {
+struct HTML
+{
   std::string filename, contents;
   std::unordered_map<const char *, const char *> data;
   HTML(const std::string &filename,
        std::unordered_map<const char *, const char *> data)
-      : data(data) {
+      : data(data)
+  {
     this->filename = "public/" + filename;
     std::ifstream file(this->filename);
-    if (!file.is_open()) {
+    if (!file.is_open())
+    {
       fprintf(stderr, "File not found: %s\n", this->filename.c_str());
       exit(1);
     }
@@ -41,15 +48,19 @@ struct HTML {
     contents = buffer.str();
     file.close();
   }
-  void replace(const std::string &s1, const std::string &s2) {
+  void replace(const std::string &s1, const std::string &s2)
+  {
     const std::string key = "{{ " + s1 + " }}";
     size_t i = contents.find(key);
-    if (i != std::string::npos) {
+    if (i != std::string::npos)
+    {
       contents.replace(i, key.length(), s2);
     }
   }
-  core::Response send() {
-    for (auto &data : this->data) {
+  core::Response send()
+  {
+    for (auto &data : this->data)
+    {
       this->replace(data.first, data.second);
     }
     core::Response res{};
@@ -62,13 +73,16 @@ struct HTML {
     return res;
   }
 };
-struct IMAGE {
+struct IMAGE
+{
   std::string filename, contents;
   IMAGE(const std::string &filename, core::Response *res)
-      : filename("public/assets/img/" + filename) {
+      : filename("public/assets/img/" + filename)
+  {
     {
       std::ifstream file(filename);
-      if (!file.is_open()) {
+      if (!file.is_open())
+      {
         fprintf(stderr, "File not found: %s\n", filename.c_str());
         exit(1);
       }

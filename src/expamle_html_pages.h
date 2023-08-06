@@ -65,5 +65,3 @@ static const std::string HTML_EXAMPLE_PAGE_4XX = R"(
   </body>
 </html>
   )";
-
-
