@@ -17,8 +17,7 @@ namespace core
     int socket;
     int send() const;
     int redirect(const std::string &path);
-    template <typename T>
-    int sendFile(T &filetype); // TODO: IMPL
+    template <class T> int sendFile(const T *filetype); 
     void pnf(std::string contents);
   };
   struct Request
@@ -80,10 +79,10 @@ struct IMAGE
       : filename("public/assets/img/" + filename)
   {
     {
-      std::ifstream file(filename);
+      std::ifstream file(this->filename);
       if (!file.is_open())
       {
-        fprintf(stderr, "File not found: %s\n", filename.c_str());
+        fprintf(stderr, "File not found: %s\n", this->filename.c_str());
         exit(1);
       }
       std::stringstream buffer;

@@ -1,4 +1,24 @@
 #+Author: AnAnnoyinGoose
-CoW - C on Web
+* CoW - C on Web
+
+* ToC
+- [[About][About]]
+  - [[Important][Important]]
+  - [[General Info][General Info]]
 
 
+* About
+** Important
+- For those who will be using the ~bin~ script you'll need the ~tcd~ script from my [[https://www.github.com/AnAnnoyinGoose/bash-scripts/blob/main/tcd.sh][bash-scripts]] repo.
+  It's just an utility script (temp change directory) that executes commands in different directories.
+** General Info
+Cow is a simple HTTP server library with routing, middleware (3 built in: Views, Logger and Encryption, but you can add others
+via the [[Adding Middleware][Adding Middleware]] guide
+
+
+
+
+* Documentation
+** Introduction
+
+** Adding Middleware
