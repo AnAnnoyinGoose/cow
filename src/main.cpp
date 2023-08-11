@@ -39,12 +39,8 @@ auto test_handler(const core::Request &request) -> core::Response
   return res;
 }
 
-
-
 // logger
 builtIn::Logger *logger = new builtIn::Logger();
-
-
 
 int main(void)
 {

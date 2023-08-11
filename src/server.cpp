@@ -1,6 +1,5 @@
 #include "server.h"
 #include "doctype.h"
-#include "middleware.h" 
 #include <cstdint>
 // X functions for the methods
 #define METHODS                                                                \
@@ -14,7 +13,6 @@
 
 
 namespace core {
-
 int Response::send() const {
   std::string response =
       this->version + " " + this->status + " " + this->message + "\r\n";
