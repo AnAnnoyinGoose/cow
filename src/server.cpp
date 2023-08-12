@@ -13,6 +13,8 @@
 
 
 namespace core {
+
+
 int Response::send() const {
   std::string response =
       this->version + " " + this->status + " " + this->message + "\r\n";

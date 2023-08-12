@@ -10,7 +10,6 @@
 #define IP "127.0.0.1" 
 #endif
 
-core::Server Server(PORT, IP);
-
+static core::Server Server(PORT, IP);
 
 #endif // !#ifndef _COW_H_
